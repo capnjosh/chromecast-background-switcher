@@ -8,6 +8,7 @@
         list: [],
         queue: [],
         qeueuMax: 2,
+        callback: undefined,
         updateList: function(data) {
 
             var url,
@@ -18,8 +19,9 @@
             }
 
         },
-        init: function(data) {
+        init: function(data, callback) {
 
+            this.callback = callback;
             this.updateList(data);
             this.change();
 
