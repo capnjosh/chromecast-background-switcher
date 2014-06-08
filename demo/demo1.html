@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Chromecast Background Switcher - Demo #1</title>
+    </head>
+    <body>
+        <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+        <script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+        <script src="../plugin/chromecast-background-switcher.js"></script>
+        <script>
+
+            $(function() {
+
+                $.ajax
+                    (
+                        '../plugin/chromecast-background-list',
+                        {
+                            dataType: 'text'
+                        }
+                    )
+                    .done(function(data) {
+
+                        chromecastBackgroundSwitcher.init(data, function(base64) {
+
+                        });
+
+                    });
+
+            });
+
+        </script>
+    </body>
+</html>
