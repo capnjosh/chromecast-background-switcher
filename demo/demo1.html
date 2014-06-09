@@ -2,8 +2,22 @@
 <html>
     <head>
         <title>Chromecast Background Switcher - Demo #1</title>
+        <style>
+
+            img#background {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                z-index: -1;
+            }
+
+        </style>
     </head>
     <body>
+        <img id="background" src="">
+
         <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
         <script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
         <script src="../plugin/chromecast-background-switcher.js"></script>
@@ -20,8 +34,12 @@
                     )
                     .done(function(data) {
 
-                        chromecastBackgroundSwitcher.init(data, function(base64) {
+                        chromecastBackgroundSwitcher.init(data, {
+                            callback: function(data) {
 
+                                $('img').fadeOut(500).attr('src', data.url).fadeIn(500);
+
+                            }
                         });
 
                     });

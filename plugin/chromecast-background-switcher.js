@@ -4,11 +4,10 @@
 
     chromecastBackgroundSwitcher.prototype = {
         interval: undefined,
-        switchEvery: 2000,
+        switchEvery: 5000,
         list: [],
         queue: [],
         qeueuMax: 2,
-        callback: undefined,
         updateList: function(data) {
 
             var url,
@@ -19,14 +18,18 @@
             }
 
         },
-        init: function(data, callback) {
+        init: function(data, options) {
 
-            this.callback = callback;
+            options = $.extend({
+                callback: undefined,
+                converter: undefined
+            }, options);
+
             this.updateList(data);
-            this.change();
+            this.change(options);
 
         },
-        change: function() {
+        change: function(options) {
 
             var __ = this;
 
@@ -34,9 +37,51 @@
                 clearInterval(__.interval);
             }
 
-            __.interval = setInterval(function() {
+            function loadImage() {
 
                 var index = Math.floor(Math.random() * __.list.length);
+
+                if (options.converter === undefined) {
+                    // Use URL
+
+                    if (typeof options.callback === 'function') {
+                        options.callback({
+                            url: __.list[index]
+                        });
+                    }
+                }
+                else {
+                    // Use converter
+
+                    $.ajax
+                        (
+                            options.converter,
+                            {
+                                type: 'POST',
+                                data: {
+                                    url: __.list[index]
+                                }
+                            }
+                        )
+                        .done(function(data) {
+
+                            if (typeof options.callback === 'function') {
+                                options.callback(data);
+                            }
+
+                        })
+                        .fail(function(jqXHR, textStatus, errorThrown) {
+
+                        });
+                }
+
+            }
+
+            loadImage();
+
+            __.interval = setInterval(function() {
+
+                loadImage();
 
             }, __.switchEvery);
 
