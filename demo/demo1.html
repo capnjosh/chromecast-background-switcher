@@ -36,9 +36,14 @@
 
                         chromecastBackgroundSwitcher.init(data, {
                             converter: '../plugin/chromecast-background-converter.py',
+                            interval: 10000,
                             callback: function(data) {
 
-                                $('img').fadeOut(500).attr('src', 'data:application/octet-stream;base64,' + data.data).fadeIn(500);
+                                if (data.success) {
+                                    $('img').fadeOut(500, function(){
+                                        $(this).attr('src', 'data:application/octet-stream;base64,' + data.data).fadeIn(500);
+                                    });
+                                }
 
                             }
                         });

@@ -3,8 +3,7 @@
     function chromecastBackgroundSwitcher() {}
 
     chromecastBackgroundSwitcher.prototype = {
-        interval: undefined,
-        switchEvery: 5000,
+        intervalHandle: undefined,
         list: [],
         updateList: function(data) {
 
@@ -23,7 +22,8 @@
 
             options = $.extend({
                 callback: undefined,
-                converter: undefined
+                converter: undefined,
+                interval: 60000
             }, options);
 
             __.updateList(data);
@@ -81,25 +81,25 @@
 
             var __ = this;
 
-            if (__.interval !== undefined) {
-                clearInterval(__.interval);
+            if (__.intervalHandle !== undefined) {
+                clearInterval(__.intervalHandle);
             }
 
             __.loadImage(options);
 
-            __.interval = setInterval(function() {
+            __.intervalHandle = setInterval(function() {
 
                 __.loadImage(options);
 
-            }, __.switchEvery);
+            }, options.interval);
 
         },
         stop: function() {
 
             var __ = this;
 
-            if (__.interval !== undefined) {
-                clearInterval(__.interval);
+            if (__.intervalHandle !== undefined) {
+                clearInterval(__.intervalHandle);
             }
 
         }
