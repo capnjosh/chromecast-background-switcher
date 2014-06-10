@@ -25,6 +25,8 @@
 
             $(function() {
 
+                // Retrieve list
+
                 $.ajax
                     (
                         '../plugin/chromecast-background-list',
@@ -34,13 +36,20 @@
                     )
                     .done(function(data) {
 
+                        // Initialize switcher
+
                         chromecastBackgroundSwitcher.init(data, {
+                            // If a converter is specified, it executes the converter and returns the image in base64.
+                            // If a converter is not specified, it returns a URL which you can access through the url property.
                             converter: '../plugin/chromecast-background-converter.py',
+                            // Interval in milliseconds
                             interval: 10000,
                             callback: function(data) {
+                                // data contains the following properties: url, success, data.
 
+                                // Check for success. If the converter fails to retrieve the file, it will return false.
                                 if (data.success) {
-                                    $('img').fadeOut(500, function(){
+                                    $('img').fadeOut(500, function() {
                                         $(this).attr('src', 'data:application/octet-stream;base64,' + data.data).fadeIn(500);
                                     });
                                 }
