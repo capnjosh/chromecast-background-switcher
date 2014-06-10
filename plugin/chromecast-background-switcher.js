@@ -40,6 +40,7 @@
 
                 if (typeof options.callback === 'function') {
                     options.callback({
+                        success: true,
                         url: __.list[index]
                     });
                 }
