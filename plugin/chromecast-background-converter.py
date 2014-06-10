@@ -1,6 +1,6 @@
 #! /usr/bin/python
 
-import cgi, json, urllib, base64, sys
+import cgi, json, urllib, base64
 
 options = cgi.FieldStorage()
 response = {

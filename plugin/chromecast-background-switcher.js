@@ -6,27 +6,75 @@
         interval: undefined,
         switchEvery: 5000,
         list: [],
-        queue: [],
-        qeueuMax: 2,
         updateList: function(data) {
 
-            var url,
+            var __ = this,
+                url,
                 sift = /\((.*)\)/g;
 
             while (url = sift.exec(data)) {
-                this.list.push(url[1]);
+                __.list.push(url[1]);
             }
 
         },
         init: function(data, options) {
+
+            var __ = this;
 
             options = $.extend({
                 callback: undefined,
                 converter: undefined
             }, options);
 
-            this.updateList(data);
-            this.change(options);
+            __.updateList(data);
+            __.change(options);
+
+        },
+        loadImage: function(options) {
+
+            var __ = this,
+                index = Math.floor(Math.random() * __.list.length);
+
+            if (options.converter === undefined) {
+                // Use URL
+
+                if (typeof options.callback === 'function') {
+                    options.callback({
+                        url: __.list[index]
+                    });
+                }
+            }
+            else {
+                // Use converter
+
+                $.ajax
+                    (
+                        options.converter,
+                        {
+                            type: 'POST',
+                            data: {
+                                url: __.list[index]
+                            }
+                        }
+                    )
+                    .done(function(data) {
+
+                        if (typeof options.callback === 'function') {
+                            options.callback(data);
+                        }
+
+                    })
+                    .fail(function(jqXHR, textStatus, errorThrown) {
+
+                        if (typeof options.callback === 'function') {
+                            options.callback({
+                                url: __.list[index],
+                                success: false
+                            });
+                        }
+
+                    });
+            }
 
         },
         change: function(options) {
@@ -37,59 +85,21 @@
                 clearInterval(__.interval);
             }
 
-            function loadImage() {
-
-                var index = Math.floor(Math.random() * __.list.length);
-
-                if (options.converter === undefined) {
-                    // Use URL
-
-                    if (typeof options.callback === 'function') {
-                        options.callback({
-                            url: __.list[index]
-                        });
-                    }
-                }
-                else {
-                    // Use converter
-
-                    $.ajax
-                        (
-                            options.converter,
-                            {
-                                type: 'POST',
-                                data: {
-                                    url: __.list[index]
-                                }
-                            }
-                        )
-                        .done(function(data) {
-
-                            if (typeof options.callback === 'function') {
-                                options.callback(data);
-                            }
-
-                        })
-                        .fail(function(jqXHR, textStatus, errorThrown) {
-
-                        });
-                }
-
-            }
-
-            loadImage();
+            __.loadImage(options);
 
             __.interval = setInterval(function() {
 
-                loadImage();
+                __.loadImage(options);
 
             }, __.switchEvery);
 
         },
         stop: function() {
 
-            if (this.interval !== undefined) {
-                clearInterval(this.interval);
+            var __ = this;
+
+            if (__.interval !== undefined) {
+                clearInterval(__.interval);
             }
 
         }
