@@ -67,10 +67,7 @@
                     .fail(function(jqXHR, textStatus, errorThrown) {
 
                         if (typeof options.callback === 'function') {
-                            options.callback({
-                                url: __.list[index],
-                                success: false
-                            });
+                            options.callback(jqXHR.responseText);
                         }
 
                     });
