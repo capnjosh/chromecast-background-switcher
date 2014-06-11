@@ -5,17 +5,6 @@
     chromecastBackgroundSwitcher.prototype = {
         intervalHandle: undefined,
         list: [],
-        updateList: function(data) {
-
-            var __ = this,
-                url,
-                sift = /\((.*)\)/g;
-
-            while (url = sift.exec(data)) {
-                __.list.push(url[1]);
-            }
-
-        },
         init: function(data, options) {
 
             var __ = this;
@@ -26,7 +15,7 @@
                 interval: 60000
             }, options);
 
-            __.updateList(data);
+            __.list = data;
             __.change(options);
 
         },
@@ -41,7 +30,7 @@
                 if (typeof options.callback === 'function') {
                     options.callback({
                         success: true,
-                        url: __.list[index]
+                        url: __.list[index].url
                     });
                 }
             }
@@ -54,7 +43,7 @@
                         {
                             type: 'POST',
                             data: {
-                                url: __.list[index]
+                                url: __.list[index].url
                             }
                         }
                     )

@@ -6,4 +6,4 @@ if [ -f $LIST ]; then
     rm $LIST
 fi
 
-curl -o $LIST https://raw.githubusercontent.com/dconnolly/chromecast-backgrounds/master/README.md
+curl -o $LIST https://raw.githubusercontent.com/dconnolly/chromecast-backgrounds/master/backgrounds.json
