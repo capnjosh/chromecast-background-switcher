@@ -28,10 +28,8 @@
                 // Use URL
 
                 if (typeof options.callback === 'function') {
-                    options.callback({
-                        success: true,
-                        url: __.list[index].url
-                    });
+                    __.list[index]['success'] = true;
+                    options.callback(__.list[index]);
                 }
             }
             else {
@@ -48,6 +46,8 @@
                         }
                     )
                     .done(function(data) {
+
+                        $.extend(data, __.list[index]);
 
                         if (typeof options.callback === 'function') {
                             options.callback(data);
