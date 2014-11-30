@@ -1,4 +1,4 @@
-(function() {
+(function( undefined ) {
 
     function chromecastBackgroundSwitcher() {
 
@@ -65,10 +65,12 @@
             }
 
             return obj;
+
         }
 
         function preheat() {
 
+            // Container for background type
             if ( settings.type === 'background' ) {
                 queueDOM = document.createElement( 'div' );
                 // display: none; prevents images from loading.

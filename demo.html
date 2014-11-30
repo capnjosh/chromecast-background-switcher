@@ -34,20 +34,28 @@
     <script src="chromecast-background-switcher.js"></script>
     <script>
 
-        var previousImage;
+        (function() {
 
-        chromecastBackgroundSwitcher.init(
-            'https://cdn.rawgit.com/dconnolly/chromecast-backgrounds/master/backgrounds.json',
-            {
-                callback: function( image ) {
-                    if ( previousImage !== undefined ) {
-                        document.getElementById( 'chromecast-background' ).removeChild( previousImage );
+            var previousImage;
+
+            chromecastBackgroundSwitcher.init(
+                // Tip #1: Download this file and edit accordingly.
+                // Tip #2: Create an array of objects with a url property. [{url: 'CustomPathOrURL'}, ...]
+                'https://cdn.rawgit.com/dconnolly/chromecast-backgrounds/master/backgrounds.json',
+                {
+                    //type: 'background', // Default: image
+                    //interval: 20000, // Default: 60000 milliseconds
+                    callback: function( image ) {
+                        if ( previousImage !== undefined ) {
+                            document.getElementById( 'chromecast-background' ).removeChild( previousImage );
+                        }
+                        previousImage = image.render;
+                        document.getElementById( 'chromecast-background' ).appendChild( image.render );
                     }
-                    previousImage = image.render;
-                    document.getElementById( 'chromecast-background' ).appendChild( image.render );
                 }
-            }
-        );
+            );
+
+        }());
 
     </script>
 </body>
