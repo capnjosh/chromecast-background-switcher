@@ -6,12 +6,15 @@
         var list;
         var timer;
         var queue = [];
-        var options = {
+        var queueDOM;
+        var defaultOptions = {
             interval: 60000,
+            type: 'image',
             callback: function() {}
         };
+        var settings;
 
-        this.init = function( url, interval, callback ) {
+        this.init = function( url, userOptions ) {
 
             self.pause();
 
@@ -20,9 +23,9 @@
 
                 if ( xhr.readyState === 4 && xhr.status === 200 ) {
                     list = JSON.parse( xhr.responseText );
-                    options.interval = interval || options.interval;
-                    options.callback = callback || options.callback;
-                    switchImage();
+                    settings = extend( {}, defaultOptions, userOptions );
+                    preheat();
+                    startEngine();
                 }
 
             };
@@ -43,9 +46,38 @@
         this.restart = function() {
 
             self.pause();
-            switchImage();
+            startEngine();
 
         };
+
+        // From http://underscorejs.org/#extend
+        function extend( obj ) {
+
+            var source, prop;
+
+            for ( var i = 1, length = arguments.length; i < length; i++ ) {
+                source = arguments[ i ];
+                for ( prop in source ) {
+                    if ( hasOwnProperty.call( source, prop ) ) {
+                        obj[ prop ] = source[ prop ];
+                    }
+                }
+            }
+
+            return obj;
+        }
+
+        function preheat() {
+
+            if ( settings.type === 'background' ) {
+                queueDOM = document.createElement( 'div' );
+                // display: none; prevents images from loading.
+                queueDOM.style.width = '0px';
+                queueDOM.style.height = '0px';
+                document.getElementsByTagName( 'body' )[0].appendChild( queueDOM );
+            }
+
+        }
 
         function loadImage() {
 
@@ -53,28 +85,39 @@
             var image = list[ Math.floor( Math.random() * list.length ) ];
 
             // Prevent request
-            if ( 'cache' in image ) {
+            if ( 'render' in image ) {
                 return image;
             }
 
-            // Cache it
-            image[ 'cache' ] = new Image();
-            image[ 'cache' ].src = image.url;
+            image[ 'render' ] = undefined;
+
+            switch ( settings.type ) {
+                case 'image':
+                    image.render = new Image();
+                    image.render.src = image.url;
+                    break;
+                case 'background':
+                    image.render = document.createElement( 'div' );
+                    image.render.style.backgroundImage = 'url("' + image.url + '")';
+                    queueDOM.appendChild( image.render );
+                    break;
+            }
+
             return image;
 
         }
 
-        function switchImage() {
+        function startEngine() {
 
             if ( queue.length === 0 ) {
                 // Initial image
-                options.callback( loadImage() );
+                settings.callback( loadImage() );
                 // Initial queue
                 queue.push( loadImage() );
             }
             else {
                 // From restart
-                options.callback( queue.shift() );
+                settings.callback( queue.shift() );
             }
 
             // Queue always maintains 2 sources
@@ -83,10 +126,10 @@
             // Start interval
             timer = setInterval( function() {
 
-                options.callback( queue.shift() );
+                settings.callback( queue.shift() );
                 queue.push( loadImage() );
 
-            }, options.interval );
+            }, settings.interval );
 
         }
     }
