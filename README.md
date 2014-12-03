@@ -18,4 +18,5 @@ See [demo](http://htmlpreview.github.io/?https://github.com/capnjosh/chromecast-
   * You can allow the script to run by clicking the gray shield icon on Firefox or Chrome or from the mixed content warning prompt on Internet Explorer. After allowing it, you might need to refresh then load the script again. :\
   * Another solution is to download the 2 dependencies (**chromecast-backgrounds.json** and **chromecast-background-switcher.js**) then upload both to a secure site, update the bookmarklet code, minify it, and update your bookmark.
   * You can use https://rawgit.com/ but wouldn't recommend it (I originally had the dependencies using it).
+  * Or assign a variable with the contents of **chromecast-backgrounds.json** and put it inside the self executing function together with **chromecast-background-switcher.js** and have a self contained bookmarklet. It's going to be HUGE though. :|
   * I'll get an SSL certificate someday. :)
