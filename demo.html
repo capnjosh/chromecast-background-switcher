@@ -6,17 +6,30 @@
     <title>Chromecast Background Switcher Demo</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="http://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
     <style>
 
-        #chromecast-background {
-            width: 640px;
-            height: 480px;
-            margin: 50px auto;
+        html, body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
         }
 
+        #chromecast-background,
         #chromecast-background > * {
             width: 100%;
             height: 100%;
+        }
+
+        #chromecast-info {
+            position: fixed;
+            right: 24px;
+            bottom: 24px;
+            padding: 24px 32px;
+            background-color: rgba(0, 0, 0, 0.8);
+            font-family: "Roboto", "Helvetica Neue", Arial, sans-serif;
+            color: #fff;
         }
 
     </style>
@@ -29,6 +42,7 @@
     <!--[if gte IE 8]><!-->
 
     <div id="chromecast-background"></div>
+    <span id="chromecast-info"></span>
 
     <!--<![endif]-->
     <script src="chromecast-background-switcher.js"></script>
@@ -46,11 +60,15 @@
                     //type: 'background', // Default: image
                     //interval: 20000, // Default: 60000 milliseconds
                     callback: function( image ) {
+                        var background = document.getElementById( 'chromecast-background' );
+                        var info = document.getElementById( 'chromecast-info' );
+
                         if ( previousImage !== undefined ) {
-                            document.getElementById( 'chromecast-background' ).removeChild( previousImage );
+                            background.removeChild( previousImage );
                         }
                         previousImage = image.render;
-                        document.getElementById( 'chromecast-background' ).appendChild( image.render );
+                        background.appendChild( image.render );
+                        info.innerText = 'author' in image ? image.author : 'Unknown';
                     }
                 }
             );
