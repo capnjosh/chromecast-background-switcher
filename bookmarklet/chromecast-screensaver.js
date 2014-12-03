@@ -27,7 +27,7 @@
         var previousImage;
 
         chromecastBackgroundSwitcher.init(
-            'https://cdn.rawgit.com/dconnolly/chromecast-backgrounds/master/backgrounds.json',
+            'http://bin.puppynkitty.com/chromecast-backgrounds.json',
             {
                 interval: switchEvery,
                 callback: function( image ) {
@@ -80,4 +80,4 @@
 
     }
 
-}( 'https://cdn.rawgit.com/capnjosh/chromecast-background-switcher/master/chromecast-background-switcher.js', 60000, 60000 ));
+}( 'http://bin.puppynkitty.com/chromecast-background-switcher.js', 60000, 60000 ));
